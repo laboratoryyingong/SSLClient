@@ -466,7 +466,7 @@ private:
      * As a rule of thumb SSLClient will fail if it does not have at least 8000 bytes when starting a
      * connection.
      */
-    unsigned char m_iobuf[BR_SSL_BUFSIZE_INPUT];
+    unsigned char m_iobuf[BR_SSL_BUFSIZE_BIDI];
     // store the index of where we are writing in the buffer
     // so we can send our records all at once to prevent
     // weird timing issues
