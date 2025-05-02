@@ -1892,7 +1892,7 @@ br_ssl_engine_set_server_name(const br_ssl_engine_context *cc, const char *serve
 	if (cc == NULL) {
         return;
     }
-    if (name == NULL) {
+    if (server == NULL) {
         cc->server_name[0] = '\0';
         return;
     }
