@@ -1901,10 +1901,6 @@ br_ssl_engine_set_server_name(br_ssl_engine_context *cc, const char *server)
 		cc->server_name[0] = 0;
 	} else {
 		int n = strlen(server) + 1;
-		if (n > sizeof cc->server_name) {
-			br_ssl_engine_fail(&cc, BR_ERR_BAD_PARAM);
-			return 0;
-		}
 		memcpy(cc->server_name, server, n);
 	}
 }
