@@ -1887,7 +1887,7 @@ br_ssl_engine_get_server_name(const br_ssl_engine_context *cc)
 }
 
 static inline void
-br_ssl_engine_set_server_name(const br_ssl_engine_context *cc, const char *server_name)
+br_ssl_engine_set_server_name(br_ssl_engine_context *cc, const char *server)
 {
 	/*
 	 * We always set back the "reneg" flag to 0 because we use it
@@ -1895,17 +1895,17 @@ br_ssl_engine_set_server_name(const br_ssl_engine_context *cc, const char *serve
 	 * Note that "renegotiation" and "session resumption" are two
 	 * different things.
 	 */
-	cc->eng.reneg = 0;
+	cc->reneg = 0;
 
-	if (server_name == NULL) {
-		cc->eng.server_name[0] = 0;
+	if (server == NULL) {
+		cc->server_name[0] = 0;
 	} else {
-		n = strlen(server_name) + 1;
-		if (n > sizeof cc->eng.server_name) {
-			br_ssl_engine_fail(&cc->eng, BR_ERR_BAD_PARAM);
+		int n = strlen(server) + 1;
+		if (n > sizeof cc->server_name) {
+			br_ssl_engine_fail(&cc, BR_ERR_BAD_PARAM);
 			return 0;
 		}
-		memcpy(cc->eng.server_name, server_name, n);
+		memcpy(cc->server_name, server, n);
 	}
 }
 
