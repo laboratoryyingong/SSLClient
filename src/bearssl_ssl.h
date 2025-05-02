@@ -1898,12 +1898,12 @@ br_ssl_engine_set_server_name(const br_ssl_engine_context *cc, const char *serve
     }
 
     size_t max_len = sizeof cc->server_name - 1;
-    size_t name_len = strlen(name);
+    size_t name_len = strlen(server);
     if (name_len > max_len) {
         name_len = max_len;
     }
 
-    memcpy(cc->server_name, name, name_len);
+    memcpy(cc->server_name, server, name_len);
     cc->server_name[name_len] = '\0';
 }
 
