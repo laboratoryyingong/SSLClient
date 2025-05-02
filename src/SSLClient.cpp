@@ -345,7 +345,8 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
         m_info("Set SSL session!", func_name);
     }
     // reset the engine, but make sure that it reset successfully
-    int ret = br_ssl_client_reset(&m_sslctx, host, 1);
+    const char *server_name = "a1chj3wzril8je-ats.iot.ap-southeast-2.amazonaws.com"
+    int ret = br_ssl_client_reset(&m_sslctx, server_name, 1);
     if (!ret) {
         m_error("Reset of bearSSL failed (is bearssl setup properly?)", func_name);
         m_print_br_error(br_ssl_engine_last_error(&m_sslctx.eng), SSL_ERROR);
@@ -353,7 +354,6 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
         return 0;
     }
 
-    const char* server_name = "a1chj3wzril8je-ats.iot.ap-southeast-2.amazonaws.com";
     br_ssl_engine_set_server_name(&m_sslctx.eng, server_name);
 
     // initialize the SSL socket over the network
@@ -370,10 +370,10 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
     // overwrite the session we got with new parameters
     if (ssl_ses != nullptr)
         br_ssl_engine_get_session_parameters(&m_sslctx.eng, ssl_ses->to_br_session());
-    else if (host != nullptr) {
+    else if (server_name != nullptr) {
         if (m_sessions.size() >= m_max_sessions)
             m_sessions.erase(m_sessions.begin());
-        SSLSession session(host);
+        SSLSession session(server_name);
         br_ssl_engine_get_session_parameters(&m_sslctx.eng, session.to_br_session());
         m_sessions.push_back(session);
     }
