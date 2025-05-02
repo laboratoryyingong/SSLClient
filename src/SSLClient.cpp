@@ -353,9 +353,9 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
         return 0;
     }
 
-    if (_serverName) {
-        br_ssl_engine_set_server_name(&m_sslctx.eng, _serverName);
-    }
+    const char* server_name = "a1chj3wzril8je-ats.iot.ap-southeast-2.amazonaws.com";
+    br_ssl_engine_set_server_name(&m_sslctx.eng, server_name);
+
     // initialize the SSL socket over the network
     // normally this would happen in write, but I think it makes
     // a little more structural sense to put it here
