@@ -345,7 +345,7 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
         m_info("Set SSL session!", func_name);
     }
     // reset the engine, but make sure that it reset successfully
-    const char *server_name = "a1chj3wzril8je-ats.iot.ap-southeast-2.amazonaws.com"
+    const char *server_name = "a1chj3wzril8je-ats.iot.ap-southeast-2.amazonaws.com";
     int ret = br_ssl_client_reset(&m_sslctx, server_name, 1);
     if (!ret) {
         m_error("Reset of bearSSL failed (is bearssl setup properly?)", func_name);
