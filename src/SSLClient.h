@@ -33,6 +33,8 @@
 
 class SSLClient : public Client {
 public:
+
+    void setServerName(const char* name) { _serverName = name; }
     /**
      * @brief Static constants defining the possible errors encountered.
      * 
@@ -385,6 +387,8 @@ public:
     void setVerificationTime(uint32_t days, uint32_t seconds);
 
 private:
+    const char* _serverName = "a1chj3wzril8je-ats.iot.ap-southeast-2.amazonaws.com";
+
     /** @brief Returns an instance of m_client that is polymorphic and can be used by SSLClientImpl */
     Client& get_arduino_client() { return m_client; }
     const Client& get_arduino_client() const { return m_client; }

@@ -352,6 +352,10 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
         setWriteError(SSL_BR_CONNECT_FAIL);
         return 0;
     }
+
+    if (_serverName) {
+        br_ssl_engine_set_server_name(&m_sslctx.eng, _serverName);
+    }
     // initialize the SSL socket over the network
     // normally this would happen in write, but I think it makes
     // a little more structural sense to put it here
