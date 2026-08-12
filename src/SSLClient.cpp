@@ -344,6 +344,10 @@ int SSLClient::m_start_ssl(const char* host, SSLSession* ssl_ses) {
         br_ssl_engine_set_session_parameters(&m_sslctx.eng, ssl_ses->to_br_session());
         m_info("Set SSL session!", func_name);
     }
+    // ALPN must be armed before the handshake starts (the ClientHello is
+    // built during m_run_until below); reset does not clear these fields.
+    br_ssl_engine_set_protocol_names(&m_sslctx.eng, m_alpn_names,
+                                     m_alpn_names != nullptr ? m_alpn_num : 0);
     // reset the engine, but make sure that it reset successfully
     int ret = br_ssl_client_reset(&m_sslctx, host, 1);
     if (!ret) {

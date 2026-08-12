@@ -34,6 +34,16 @@
 class SSLClient : public Client {
 public:
     /**
+     * @brief Set the ALPN protocol list offered in the TLS handshake.
+     *
+     * AWS IoT on port 443 requires ALPN "x-amzn-mqtt-ca" or it rejects the
+     * handshake; on 8883 no ALPN must be offered. The array (and the strings
+     * it points to) must stay alive for the lifetime of this client - only
+     * the pointers are stored. Pass (nullptr, 0) to offer no ALPN again.
+     */
+    void setALPNProtocols(const char** names, size_t num) { m_alpn_names = names; m_alpn_num = num; }
+
+    /**
      * @brief Static constants defining the possible errors encountered.
      * 
      * If SSLClient encounters an error, it will generally output
@@ -385,6 +395,11 @@ public:
     void setVerificationTime(uint32_t days, uint32_t seconds);
 
 private:
+    // ALPN list armed by setALPNProtocols(); handed to BearSSL right before
+    // each handshake in m_start_ssl().
+    const char** m_alpn_names = nullptr;
+    size_t m_alpn_num = 0;
+
     /** @brief Returns an instance of m_client that is polymorphic and can be used by SSLClientImpl */
     Client& get_arduino_client() { return m_client; }
     const Client& get_arduino_client() const { return m_client; }
