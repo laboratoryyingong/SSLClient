@@ -481,7 +481,15 @@ private:
      * As a rule of thumb SSLClient will fail if it does not have at least 8000 bytes when starting a
      * connection.
      */
-    unsigned char m_iobuf[BR_SSL_BUFSIZE_BIDI];
+    // Overridable from the application build (SplashMe: -DSSLCLIENT_IOBUF_SIZE=12288).
+    // A buffer below BR_SSL_BUFSIZE_BIDI makes BearSSL negotiate the RFC 6066
+    // max_fragment_length extension automatically; 12288 yields MFL-4096, which
+    // AWS IoT honours (proven by the same fleet's mbedTLS MFL-4096 setup), and
+    // shrinks sizeof(SSLClient) from ~39.7KB to ~18KB.
+#ifndef SSLCLIENT_IOBUF_SIZE
+#define SSLCLIENT_IOBUF_SIZE BR_SSL_BUFSIZE_BIDI
+#endif
+    unsigned char m_iobuf[SSLCLIENT_IOBUF_SIZE];
     // store the index of where we are writing in the buffer
     // so we can send our records all at once to prevent
     // weird timing issues
